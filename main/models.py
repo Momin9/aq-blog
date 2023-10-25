@@ -4,6 +4,7 @@ from datetime import date
 from django.template.defaultfilters import slugify
 from ckeditor.fields import RichTextField
 
+
 # Create your models here.
 class Blog(models.Model):
     name = models.CharField(max_length=100)
@@ -21,6 +22,7 @@ class Blog(models.Model):
             self.slug = slugify(self.name + "-" + str(self.post_date))
         return super().save(*args, **kwargs)
 
+
 class BlogComment(models.Model):
     description = models.TextField(help_text="Write your comment")
     author = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
@@ -30,6 +32,7 @@ class BlogComment(models.Model):
     def __str__(self):
         return str(self.blog)
 
+
 class Contact(models.Model):
     first_name = models.CharField(max_length=200)
     last_name = models.CharField(max_length=200)
@@ -37,6 +40,6 @@ class Contact(models.Model):
     phone_number = models.IntegerField()
     contact_message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True, blank=True)
-    
+
     def __str__(self):
         return str(self.first_name + " " + self.last_name)
