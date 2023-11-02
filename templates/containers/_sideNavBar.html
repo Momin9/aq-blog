@@ -1,0 +1,28 @@
+<div class="list-group">
+    <a href="{% url 'user_public_details' %}" 
+    {% if request.path == "/authors/update_public_details/" %}
+        class="list-group-item list-group-item-action active" 
+    {% else %}
+        class="list-group-item list-group-item-action" 
+    {% endif %}
+    aria-current="true">
+    <i class="fa-solid fa-lock-open"></i> Edit Public Details
+    </a>
+
+    <a href="{% url 'edit_user' %}" 
+    {% if request.path == "/authors/edit_profile/" %}
+        class="list-group-item list-group-item-action active" 
+    {% else %}
+        class="list-group-item list-group-item-action" 
+    {% endif %}
+    > <i class="fa-solid fa-lock"></i> Edit Private Details</a>
+
+    <a href="{% url 'change-password' %}"
+    {% if request.path == "/authors/change_password/" %}
+        class="list-group-item list-group-item-action active" 
+    {% else %}
+        class="list-group-item list-group-item-action" 
+    {% endif %}
+    ><i class="fa-solid fa-key"></i> Change password</a>
+    <a class="list-group-item list-group-item-action bg-danger" href="{% url 'delete_user' user.id %}" style="color: white;"><i class="fa-solid fa-user-slash"></i> Delete Account</a>
+  </div>
