@@ -49,7 +49,9 @@
                     <li>
                         <a class="dropdown-item" href="{% url 'dashboard' %}"><i class="fa-solid fa-chart-line"></i> Dashboard</a>
                     </li>
+                    {% if user.is_staff %}
                     <li><a class="dropdown-item" href="{% url 'create-blog' %}"><i class="fa-solid fa-pen-to-square"></i> Create Blog</a></li>
+                    {% endif %}
                     <li>
                         <a class="dropdown-item" href="{% url 'user_public_details' %}"><i class="fa-solid fa-gear"></i> Settings</a>
                     </li>
