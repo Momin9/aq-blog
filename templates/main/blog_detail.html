@@ -48,7 +48,7 @@
             <div class="col">
                 {% if user.is_authenticated %}
                     {% if blog.author.id == user.id %}
-                        <h3 class="text-center text-warning">You are not allowed to post comment on your own blog</h3>
+                        <h6 class="text-center text-warning">You are not allowed to post comment on your own blog</h6>
                     {% else %}
                     <h3>Write your comment...</h3>
                     <form method="post">
@@ -58,7 +58,7 @@
                     </form>
                     {% endif %}
                 {% else %}
-                    <h2 class="text-center text-danger">Please Login to comment on this post <a href="{% url 'login' %}">Login</a></h2>
+                    <h4 class="text-center text-danger">Please Login to comment on this post <a href="{% url 'login' %}">Login</a></h4>
                 {% endif %}
             </div>
         </div>
