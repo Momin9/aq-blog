@@ -22,3 +22,15 @@ class UserProfuile(models.Model):
 
     def __str__(self):
         return f"{self.user.username}'s profile"
+
+
+class UserBiography(models.Model):
+    user = models.OneToOneField(UserProfuile, on_delete=models.CASCADE)
+    biograpy = models.TextField(blank=True)
+    tel= models.TextField(blank=True)
+    email = models.EmailField(blank=True)
+    skills_and_expertise = models.TextField(blank=True)
+    title_name = models.TextField(blank=True)
+    chair = models.CharField(max_length=200, blank=True)
+    fax = models.CharField(max_length=200, blank=True)
+
