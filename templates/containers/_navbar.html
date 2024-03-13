@@ -31,6 +31,15 @@
                     {% endif %}
                     href="{% url 'contact_us' %}"><i class="fa-solid fa-address-book"></i> Contact Us</a>
                 </li>
+                <li class="nav-item">
+                    <a 
+                    {% if request.path == "/contact_us/" %}
+                        class="nav-link active" 
+                    {% else %}
+                        class="nav-link" 
+                    {% endif %}
+                    href="{% url 'biography' %}"><i class="fa-solid fa-address-book"></i> Biography</a>
+                </li>
             </ul>
         </div>
         <ul class="navbar-nav mb-2 mb-lg-0">

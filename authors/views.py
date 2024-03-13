@@ -2,7 +2,8 @@ from django.shortcuts import redirect, render
 from django.core.paginator import Paginator
 from django.contrib import messages
 from django.urls import reverse_lazy
-from .forms import SignupForm, LoginUserForm, PasswordChangingForm, EditUserProfileForm, UserPublicDetailsForm
+from .forms import SignupForm, LoginUserForm, PasswordChangingForm, EditUserProfileForm, UserPublicDetailsForm, \
+    UserBiographyForm
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.views import PasswordChangeView
 from main.models import Blog, BlogComment
@@ -10,7 +11,8 @@ from django.views import generic
 from django.contrib.messages.views import SuccessMessageMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import UserProfuile
+from .models import UserProfuile, UserBiography
+from django.views.generic import FormView, ListView, TemplateView
 
 
 class signUp(SuccessMessageMixin, generic.CreateView):
@@ -144,3 +146,24 @@ class Dashboard(LoginRequiredMixin ,generic.View):
             'user_comments': user_comments
         }
         return render(request, "authors/dashboard.html", context)
+
+
+class UserBiographyView(FormView):
+    form_class = UserBiographyForm
+    template_name = "main/biography.html"
+    success_url = '/'
+
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+class ShowBiographyView(ListView):
+    template_name = 'main/biography_main.html'
+    model = UserBiography
+    context_object_name = 'user_biograpphy'
+
+    def get_queryset(self):
+        user = self.request.user
+        print(user)
+        queryset = UserBiography.objects.filter(user_id=user.id)
+        return queryset

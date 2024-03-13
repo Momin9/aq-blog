@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, UserChangeForm
 from django.contrib.auth.models import User
-from .models import UserProfuile
+from .models import UserProfuile, UserBiography
 
 
 class UserPublicDetailsForm(forms.ModelForm):
@@ -137,3 +137,18 @@ class EditUserProfileForm(UserChangeForm):
     class Meta:
         model = User
         fields = ['username', 'first_name', "last_name", 'email']
+
+class UserBiographyForm(forms.ModelForm):
+    biography = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control',
+                                                              'placeholder': "Enter biography"}))
+    tel = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control',
+                                                        'placeholder': "Enter Telephone Here"}))
+    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control',
+                                                            'placeholder': "Enter Your Email"}))
+    skills_and_expertise = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control',
+                                                                         'placeholder': "Enter Your Skills Here"}))
+
+    class Meta:
+        model = UserBiography
+        fields = '__all__'
+
