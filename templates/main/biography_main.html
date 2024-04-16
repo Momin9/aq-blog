@@ -1,0 +1,119 @@
+I apologize for the oversight. Let me adjust the styling of the updated code to better match the example styling:
+
+```html
+{% extends 'base.html' %}
+{% block content %}
+    <div id="wrapper" class="hfeed">
+        <div id="main">
+            <div id="container">
+                <div id="content" role="main">
+                    <div class="wp-block-columns is-layout-flex wp-container-core-columns-layout-1 wp-block-columns-is-layout-flex">
+                        <div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow" style="flex-basis:33.33%">
+                            {% for biography in user_biograpphy %}
+                                <figure class="wp-block-image size-large is-resized">
+                                    <img decoding="async" width="683" height="1024" src="{{ biography.user.profile_image.url }}" alt="" class="wp-image-112" style="width:100%;height:auto" />
+                                </figure>
+                            {% endfor %}
+                        </div>
+
+                        <div class="wp-block-column is-layout-flow wp-block-column-is-layout-flow" style="flex-basis:66.66%">
+                            {% for biography in user_biograpphy %}
+                                <h2 class="wp-block-heading"><strong>{{ biography.title_name }}</strong></h2>
+                                <p><strong>{{ biography.user.bio }}</strong></p>
+                                <p><strong><em>Chair:</em></strong> {{ biography.chair }} <br><strong><em>Senior Member:</em></strong> IEEE </p>
+                                <p><strong>Tel:</strong> {{ biography.tel }}    <strong>Fax:</strong> {{ biography.fax }}<br><strong>Email:</strong> {{ biography.email }} <br></p>
+                                <p><strong>{{ biography.title_name }}</strong> {{ biography.biograpy }}</p>
+
+                                <div class="wp-block-buttons is-layout-flex wp-block-buttons-is-layout-flex">
+                                    <div class="wp-block-button is-style-fill">
+                                        <a class="wp-block-button__link wp-element-button" href="http://aliqureshi.info/wp-content/uploads/2024/01/MAQCV-30.pdf" target="_blank" rel="noreferrer noopener">Download CV</a>
+                                    </div>
+                                </div>
+
+                                <p>&nbsp;</p>
+
+                                <p><strong>Skills and expertise:</strong><br>{{ biography.skills_and_expertise }}</p>
+
+                                <figure class="wp-block-image">
+                                    <a href="http://info.flagcounter.com/Mv4j"><img decoding="async" src="http://s09.flagcounter.com/countxl/Mv4j/bg_FFFFFF/txt_000000/border_CCCCCC/columns_9/maxflags_50/viewers_0/labels_1/pageviews_1/flags_0/percent_0/" alt="Flag Counter"/></a>
+                                </figure>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div><!-- #content -->
+            </div><!-- #container -->
+        </div><!-- #main -->
+
+        <div id="footer" role="contentinfo">
+            <div id="colophon">
+                <div id="footer-widget-area" role="complementary">
+                    <div id="first" class="widget-area">
+                        <ul class="xoxo">
+                            <li id="block-5" class="widget-container widget_block">
+                                <div class="wp-block-group is-layout-flow wp-block-group-is-layout-flow">
+                                    <div class="wp-block-group__inner-container">
+                                        <h2 class="wp-block-heading">Archives</h2>
+                                        <ul class="wp-block-archives-list wp-block-archives">
+                                            <li><a href='https://aliqureshi.info/2024/02/'>February 2024</a></li>
+                                            <li><a href='https://aliqureshi.info/2024/01/'>January 2024</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                            <li id="block-6" class="widget-container widget_block">
+                                <div class="wp-block-group is-layout-flow wp-block-group-is-layout-flow">
+                                    <div class="wp-block-group__inner-container">
+                                        <h2 class="wp-block-heading">Categories</h2>
+                                        <ul class="wp-block-categories-list wp-block-categories">
+                                            <li class="cat-item cat-item-5"><a href="https://aliqureshi.info/category/journal-publications/">Journal Publications</a></li>
+                                            <li class="cat-item cat-item-6"><a href="https://aliqureshi.info/category/misc/">Miscellaneous</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div><!-- #first .widget-area -->
+
+                    <div id="second" class="widget-area">
+                        <ul class="xoxo">
+                            <li id="block-8" class="widget-container widget_block">
+                                <ul class="wp-block-social-links has-normal-icon-size is-content-justification-center is-layout-flex wp-container-core-social-links-layout-1 wp-block-social-links-is-layout-flex">
+                                    <li class="wp-social-link wp-social-link-facebook  wp-block-social-link">
+                                        <a href="https://www.facebook.com/dr.muhammad.ali.qureshi" class="wp-block-social-link-anchor">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                                                <path d="M12 2C6.5 2 2 6.5 2 12c0 5 3.7 9.1 8.4 9.9v-7H7.9V12h2.5V9.8c0-2.5 1.5-3.9 3.8-3.9 1.1 0 2.2.2 2.2.2v2.5h-1.3c-1.2 0-1.6.8-1.6 1.6V12h2.8l-.4 2.9h-2.3v7C18.3 21.1 22 17 22 12c0-5.5-4.5-10-10-10z"></path>
+                                            </svg>
+                                            <span class="wp-block-social-link-label screen-reader-text">Facebook</span>
+                                        </a>
+                                    </li>
+                                    <li class="wp-social-link wp-social-link-google  wp-block-social-link">
+                                        <a href="https://scholar.google.com/citations?user=E6UbiKsAAAAJ&#038;hl=en" class="wp-block-social-link-anchor">
+                                            <svg width="24" height="24" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+                                                <path d="M12.02,10.18v3.72v0.01h5.51
+
+c-0.26,1.57-1.67,4.22-5.5,4.22c-3.31,0-6.01-2.75-6.01-6.12s2.7-6.12,6.01-6.12 c1.87,0,3.13,0.8,3.85,1.48l2.84-2.76C16.99,2.99,14.73,2,12.03,2c-5.52,0-10,4.48-10,10s4.48,10,10,10c5.77,0,9.6-4.06,9.6-9.77 c0-0.83-0.11-1.42-0.25-2.05H12.02z"></path>
+                                            </svg>
+                                            <span class="wp-block-social-link-label screen-reader-text">Google</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div><!-- #second .widget-area -->
+                </div><!-- #footer-widget-area -->
+
+                <div id="site-info">
+                    <a href="https://aliqureshi.info/" rel="home">M.A. QURESHI</a>
+                </div><!-- #site-info -->
+
+                <div id="site-generator">
+                    <a href="https://wordpress.org/" class="imprint" title="Semantic Personal Publishing Platform">
+                        Proudly powered by WordPress.
+                    </a>
+                </div><!-- #site-generator -->
+            </div><!-- #colophon -->
+        </div><!-- #footer -->
+    </div><!-- #wrapper -->
+{% endblock content %}
+
+
