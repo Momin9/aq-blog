@@ -2,7 +2,6 @@
 {% block title %}Biography{% endblock title %}
 {% block content %}
     <h3>Biography</h3>
-    {% if user_biographies %}
         {% for biography in user_biographies %}
             <div class="card mb-2" style="border: none;">
                 <div class="row g-1">
@@ -40,12 +39,4 @@
                 <p class="card-text">{{ biography.skills_and_expertise }}</p>
             </div>
         {% endfor %}
-
-        {% if has_biography %}
-            <a href="{% url 'update-biography' user_biographies.first.id %}" class="btn btn-info">Update Biography</a>
-        {% endif %}
-    {% else %}
-        <p>No biography found.</p>
-        <a href="{% url 'create-biography' %}" class="btn btn-primary">Create Biography</a>
-    {% endif %}
 {% endblock content %}

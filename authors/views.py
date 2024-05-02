@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.contrib.auth.views import PasswordChangeView
 from django.contrib.messages.views import SuccessMessageMixin
@@ -12,7 +13,7 @@ from django.views.generic import ListView, UpdateView, CreateView
 
 from main.models import Blog, BlogComment
 from .forms import SignupForm, LoginUserForm, PasswordChangingForm, EditUserProfileForm, UserPublicDetailsForm, \
-    UserBiographyForm, BiographyForm
+    BiographyForm
 from .models import UserProfile, UserBiography
 
 
@@ -150,7 +151,7 @@ class Dashboard(LoginRequiredMixin, generic.View):
         return render(request, "authors/dashboard.html", context)
 
 
-class UserBiographyView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+class UserBiographyView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, CreateView):
     model = UserBiography
     form_class = BiographyForm
     template_name = "main/create_biography.html"
@@ -161,25 +162,41 @@ class UserBiographyView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         form.instance.user_profile = self.request.user.user_profile
         return super().form_valid(form)
 
-class UpdateBiographyView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
+    def test_func(self):
+        return self.request.user.is_superuser  # Only superusers can create a biography
+
+
+class UpdateBiographyView(LoginRequiredMixin, UserPassesTestMixin, SuccessMessageMixin, UpdateView):
     model = UserBiography
     form_class = BiographyForm
     template_name = "main/update_biography.html"
     success_url = reverse_lazy('biography')
     success_message = "Your biography has been updated successfully."
 
-class ShowBiographyView(LoginRequiredMixin, ListView):
+    def test_func(self):
+        return self.request.user.is_superuser
+
+
+class SuperuserTemplateMixin:
+    def get_template_names(self):
+        if self.request.user.is_authenticated and self.request.user.is_superuser:
+            return ['main/show_biography.html']
+        else:
+            return ['main/biography.html']
+
+
+class ShowBiographyView(SuperuserTemplateMixin, ListView):
     model = UserBiography
-    template_name = 'main/show_biography.html'
     context_object_name = 'user_biographies'
 
     def get_queryset(self):
-        return UserBiography.objects.filter(user_profile=self.request.user.user_profile)
+        self.user = UserProfile.objects.filter(user__is_superuser=True).first()
+        return UserBiography.objects.filter(user_profile=self.user)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         try:
-            context['has_biography'] = self.request.user.user_profile.user_biography
+            context['has_biography'] = self.user.user_biography
         except UserBiography.DoesNotExist:
             context['has_biography'] = None
         return context
