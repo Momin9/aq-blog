@@ -1,18 +1,19 @@
-from django.shortcuts import redirect, render
-from django.core.paginator import Paginator
 from django.contrib import messages
-from django.urls import reverse_lazy
-from .forms import SignupForm, LoginUserForm, PasswordChangingForm, EditUserProfileForm, UserPublicDetailsForm, \
-    UserBiographyForm
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.views import PasswordChangeView
-from main.models import Blog, BlogComment
-from django.views import generic
-from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
-from .models import UserProfuile, UserBiography
-from django.views.generic import FormView, ListView, TemplateView
+from django.contrib.auth.models import User
+from django.contrib.auth.views import PasswordChangeView
+from django.contrib.messages.views import SuccessMessageMixin
+from django.core.paginator import Paginator
+from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
+from django.views import generic
+from django.views.generic import ListView, UpdateView, CreateView
+
+from main.models import Blog, BlogComment
+from .forms import SignupForm, LoginUserForm, PasswordChangingForm, EditUserProfileForm, UserPublicDetailsForm, \
+    UserBiographyForm, BiographyForm
+from .models import UserProfile, UserBiography
 
 
 class signUp(SuccessMessageMixin, generic.CreateView):
@@ -73,7 +74,7 @@ class profile(LoginRequiredMixin, generic.View):
 
     def get(self, request, user_name):
         user_related_data = Blog.objects.filter(author__username=user_name)[:6]
-        user_profile_data = UserProfuile.objects.get(user=request.user.id)
+        user_profile_data = UserProfile.objects.get(user=request.user.id)
         context = {
             "user_related_data": user_related_data,
             'user_profile_data': user_profile_data
@@ -81,7 +82,7 @@ class profile(LoginRequiredMixin, generic.View):
         return render(request, self.template_name, context)
 
 
-class PasswordChangeView(LoginRequiredMixin, PasswordChangeView):
+class PasswordchangeView(LoginRequiredMixin, PasswordChangeView):
     form_class = PasswordChangingForm
     login_url = 'login'
     success_url = reverse_lazy('password_success')
@@ -123,18 +124,19 @@ class UpdatePublicDetails(LoginRequiredMixin, SuccessMessageMixin, generic.Updat
     success_message = "User updated"
 
     def get_object(slef):
-        return slef.request.user.userprofuile
+        return slef.request.user.user_profile
 
     def form_invalid(self, form):
         messages.add_message(self.request, messages.ERROR, "Please submit the form carefully")
         return redirect('home')
 
-class Dashboard(LoginRequiredMixin ,generic.View):
+
+class Dashboard(LoginRequiredMixin, generic.View):
     login_url = "login"
 
     def get(self, request):
-        user_related_data = Blog.objects.filter(author__username = request.user.username)
-        user_comments = BlogComment.objects.filter(author__username = request.user.username)
+        user_related_data = Blog.objects.filter(author__username=request.user.username)
+        user_comments = BlogComment.objects.filter(author__username=request.user.username)
 
         paginator = Paginator(user_related_data, 10)
         page_number = request.GET.get('page')
@@ -148,22 +150,36 @@ class Dashboard(LoginRequiredMixin ,generic.View):
         return render(request, "authors/dashboard.html", context)
 
 
-class UserBiographyView(FormView):
-    form_class = UserBiographyForm
-    template_name = "main/biography.html"
-    success_url = '/'
+class UserBiographyView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
+    model = UserBiography
+    form_class = BiographyForm
+    template_name = "main/create_biography.html"
+    success_url = reverse_lazy('biography')
+    success_message = "Your biography has been created successfully."
 
     def form_valid(self, form):
-        form.save()
+        form.instance.user_profile = self.request.user.user_profile
         return super().form_valid(form)
 
-class ShowBiographyView(ListView):
-    template_name = 'main/biography_main.html'
+class UpdateBiographyView(LoginRequiredMixin, SuccessMessageMixin, UpdateView):
     model = UserBiography
-    context_object_name = 'user_biograpphy'
+    form_class = BiographyForm
+    template_name = "main/update_biography.html"
+    success_url = reverse_lazy('biography')
+    success_message = "Your biography has been updated successfully."
+
+class ShowBiographyView(LoginRequiredMixin, ListView):
+    model = UserBiography
+    template_name = 'main/show_biography.html'
+    context_object_name = 'user_biographies'
 
     def get_queryset(self):
-        user = self.request.user
-        print(user)
-        queryset = UserBiography.objects.filter(user_id=user.id)
-        return queryset
+        return UserBiography.objects.filter(user_profile=self.request.user.user_profile)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        try:
+            context['has_biography'] = self.request.user.user_profile.user_biography
+        except UserBiography.DoesNotExist:
+            context['has_biography'] = None
+        return context

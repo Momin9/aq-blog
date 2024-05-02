@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}Create Biography{% endblock title %}
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    {{ form.media }}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Create Biography</button>
+</form>
+{% endblock content %}

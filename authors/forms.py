@@ -1,7 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm, PasswordChangeForm, UserChangeForm
 from django.contrib.auth.models import User
-from .models import UserProfuile, UserBiography
+
+from .models import UserBiography, UserProfile
 
 
 class UserPublicDetailsForm(forms.ModelForm):
@@ -41,7 +42,7 @@ class UserPublicDetailsForm(forms.ModelForm):
         })
 
     class Meta:
-        model = UserProfuile
+        model = UserProfile
         fields = "__all__"
 
 
@@ -138,17 +139,38 @@ class EditUserProfileForm(UserChangeForm):
         model = User
         fields = ['username', 'first_name', "last_name", 'email']
 
-class UserBiographyForm(forms.ModelForm):
-    biography = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control',
-                                                              'placeholder': "Enter biography"}))
-    tel = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control',
-                                                        'placeholder': "Enter Telephone Here"}))
-    email = forms.EmailField(widget=forms.EmailInput(attrs={'class': 'form-control',
-                                                            'placeholder': "Enter Your Email"}))
-    skills_and_expertise = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control',
-                                                                         'placeholder': "Enter Your Skills Here"}))
 
+class UserBiographyForm(forms.ModelForm):
     class Meta:
         model = UserBiography
         fields = '__all__'
 
+        widgets = {
+            'university_designation': forms.TextInput(
+                attrs={'class': 'form-control', 'placeholder': 'University Designation'}),
+            'role': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Role'}),
+            'other_designation': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Other Designation'}),
+            'phone_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
+            'fax': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Fax'}),
+            'biography': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Biography'}),
+            'skills_and_expertise': forms.Textarea(
+                attrs={'class': 'form-control', 'placeholder': 'Skills and Expertise'}),
+        }
+
+
+class BiographyForm(forms.ModelForm):
+    class Meta:
+        model = UserBiography
+        exclude = ('first_name','last_name', 'profile_image')
+
+        widgets = {
+            'university_designation': forms.TextInput(
+                attrs={'class': 'form-control', 'placeholder': 'University Designation'}),
+            'role': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Role'}),
+            'other_designation': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Other Designation'}),
+            'phone_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Phone Number'}),
+            'fax': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Fax'}),
+            'biography': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Biography'}),
+            'skills_and_expertise': forms.Textarea(
+                attrs={'class': 'form-control', 'placeholder': 'Skills and Expertise'}),
+        }

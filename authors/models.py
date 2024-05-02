@@ -1,12 +1,9 @@
+from django.contrib.auth.models import User
 from django.db import models
-# from django.contrib.auth.models import User
-from django.contrib.auth import get_user_model  # current user model
-
-User = get_user_model()
 
 
-class UserProfuile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='user_profile', primary_key=True)
     bio = models.TextField(blank=True)
     location = models.CharField(max_length=50, blank=True)
     dob = models.DateField(max_length=10, null=True, blank=True)
@@ -25,12 +22,24 @@ class UserProfuile(models.Model):
 
 
 class UserBiography(models.Model):
-    user = models.OneToOneField(UserProfuile, on_delete=models.CASCADE)
-    biograpy = models.TextField(blank=True)
-    tel= models.TextField(blank=True)
-    email = models.EmailField(blank=True)
+    user_profile = models.OneToOneField(UserProfile, on_delete=models.CASCADE, related_name="user_biography")
+    first_name = models.CharField(max_length=30, blank=True)
+    last_name = models.CharField(max_length=30, blank=True)
+    profile_image = models.ImageField(upload_to="biography/profile/", blank=True)
+    university_designation = models.CharField(max_length=100, blank=True)
+    role = models.CharField(max_length=100, blank=True)
+    other_designation = models.CharField(max_length=100, blank=True)
+    phone_number = models.CharField(max_length=20, blank=True)
+    fax = models.CharField(max_length=20, blank=True)
+    biography = models.TextField(blank=True)
     skills_and_expertise = models.TextField(blank=True)
-    title_name = models.TextField(blank=True)
-    chair = models.CharField(max_length=200, blank=True)
-    fax = models.CharField(max_length=200, blank=True)
 
+    def save(self, *args, **kwargs):
+        # Get first_name, last_name, and profile_image from related models
+        self.first_name = self.user_profile.user.first_name
+        self.last_name = self.user_profile.user.last_name
+        self.profile_image = self.user_profile.profile_image
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.user_profile.user.username}'s biography"

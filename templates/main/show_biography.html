@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block title %}Biography{% endblock title %}
+{% block content %}
+    <h3>Biography</h3>
+    {% if user_biographies %}
+        {% for biography in user_biographies %}
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-3">
+                        {% if biography.profile_image %}
+                            <img src="{{ biography.profile_image.url }}" class="img-fluid rounded-start"
+                                 alt="Profile Image">
+                        {% endif %}
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">Biography Details:</h5>
+                            <ul class="list-unstyled">
+                                <li><strong>First Name:</strong> {{ biography.first_name }}</li>
+                                <li><strong>Last Name:</strong> {{ biography.last_name }}</li>
+                                <li><strong>University Designation:</strong> {{ biography.university_designation }}</li>
+                                <li><strong>Role:</strong> {{ biography.role }}</li>
+                                <li><strong>Other Designation:</strong> {{ biography.other_designation }}</li>
+                                <li><strong>Phone Number:</strong> {{ biography.phone_number }}</li>
+                                <li><strong>Fax:</strong> {{ biography.fax }}</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+
+        {% for biography in user_biographies %}
+            <div class="mb-3">
+                <h6 class="card-text"><strong>Biography:</strong></h6>
+                <p class="card-text">{{ biography.biography }}</p>
+            </div>
+            <div>
+                <h6 class="card-text"><strong>Skills and Expertise:</strong></h6>
+                <p class="card-text">{{ biography.skills_and_expertise }}</p>
+            </div>
+        {% endfor %}
+
+        {% if has_biography %}
+            <a href="{% url 'update-biography' user_biographies.first.id %}" class="btn btn-info">Update Biography</a>
+        {% endif %}
+    {% else %}
+        <p>No biography found.</p>
+        <a href="{% url 'create-biography' %}" class="btn btn-primary">Create Biography</a>
+    {% endif %}
+{% endblock content %}
