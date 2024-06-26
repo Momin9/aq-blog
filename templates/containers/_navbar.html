@@ -38,7 +38,16 @@
                     {% else %}
                         class="nav-link" 
                     {% endif %}
-                    href="{% url 'biography' %}"><i class="fa-solid fa-address-book"></i> Biography</a>
+                    href="{% url 'biography' %}"><i class="fa-solid fa-book-reader"></i> Biography</a>
+                </li>
+            <li class="nav-item">
+                    <a 
+                    {% if request.path == "/contact_us/" %}
+                        class="nav-link active" 
+                    {% else %}
+                        class="nav-link" 
+                    {% endif %}
+                    href="{% url 'biography' %}"><i class="fa-solid fa-file-image"></i>Image Processing</a>
                 </li>
             </ul>
         </div>
