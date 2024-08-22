@@ -20,6 +20,7 @@ stages:          # List of stages for jobs, and their order of execution
   - build
   - test
   - deploy
+  - mirror
 
 build-job:       # This job runs in the build stage, which runs first.
   stage: build
@@ -40,3 +41,16 @@ deploy-job:      # This job runs in the deploy stage.
   script:
     - echo "Deploying application..."
     - echo "Application successfully deployed."
+
+
+mirror_to_github:
+  stage: mirror
+  script:
+    - git remote add github https://momin9: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@github.com/Momin9/BE.git
+    - git checkout -b main
+    - git fetch origin
+    - git push github --mirror
+  only:
+    - main  # Adjust branch as needed
+
+
