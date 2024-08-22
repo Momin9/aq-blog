@@ -46,7 +46,7 @@ deploy-job:      # This job runs in the deploy stage.
 mirror_to_github:
   stage: mirror
   script:
-    - git remote add github https://momin9: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@github.com/Momin9/Blog.git
+    - git remote add github https://momin9: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@github.com/Momin9/aq-blog.git
     - git checkout -b main
     - git fetch origin
     - git push github --mirror
